@@ -46,16 +46,17 @@ fun HomeScreen(navController: NavController = rememberNavController(), moviesVie
             }
         )
     }) { padding ->
-        MainContent(modifier = Modifier.padding(padding), navController = navController)
+        MainContent(modifier = Modifier.padding(padding), navController = navController, moviesViewModel = moviesViewModel)
     }
 }
 
 @Composable
 fun MainContent(
     modifier: Modifier,
-    navController: NavController
+    navController: NavController,
+    moviesViewModel: MoviesViewModel
 ) {
-    val movies = getMovies()
+    val movies = moviesViewModel.movieList
     MovieList(
         modifier = modifier,
         navController = navController,

@@ -22,7 +22,7 @@ fun FavoriteScreen(navController: NavController, moviesViewModel: MoviesViewMode
             Text(text = "My Favorite Movies")
         }
     }){ padding ->
-        val movieList: List<Movie> = getMovies()
+        val movieList: List<Movie> = moviesViewModel.getFavoriteMovies()
 
         Column(modifier = Modifier.padding(padding)) {
             LazyColumn {

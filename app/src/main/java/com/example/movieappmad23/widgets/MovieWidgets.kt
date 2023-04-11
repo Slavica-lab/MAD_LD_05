@@ -9,9 +9,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,7 +21,6 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
@@ -34,7 +31,7 @@ import com.example.movieappmad23.models.Movie
 import com.example.movieappmad23.models.getMovies
 import com.example.movieappmad23.ui.theme.Shapes
 
-@Preview
+
 @Composable
 fun MovieRow(
     movie: Movie = getMovies()[0],
@@ -57,7 +54,7 @@ fun MovieRow(
                 contentAlignment = Alignment.Center
             ) {
                 MovieImage(imageUrl = movie.images[0])
-                FavoriteIcon()
+                FavoriteIcon(movie)
             }
 
             MovieDetails(modifier = Modifier.padding(12.dp), movie = movie)
@@ -83,15 +80,17 @@ fun MovieImage(imageUrl: String) {
 }
 
 @Composable
-fun FavoriteIcon() {
+fun FavoriteIcon(movie: Movie) {
     Box(modifier = Modifier
         .fillMaxSize()
         .padding(10.dp),
         contentAlignment = Alignment.TopEnd
     ){
         Icon(
+            modifier = Modifier
+                .clickable { movie.isFavorite.value = !movie.isFavorite.value},
             tint = MaterialTheme.colors.secondary,
-            imageVector = Icons.Default.FavoriteBorder,
+            imageVector = if(movie.isFavorite.value) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
             contentDescription = "Add to favorites")
     }
 }

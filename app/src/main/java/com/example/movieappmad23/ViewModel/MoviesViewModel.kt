@@ -12,7 +12,7 @@ class MoviesViewModel: ViewModel() {
     //write methods
 
     fun getFavoriteMovies(): List<Movie>{
-        return _movieList.filter { it.isFavorite }
+        return _movieList.filter { it.isFavorite.value }
     }
 
     fun removeMovie(movie: Movie) {
@@ -21,6 +21,10 @@ class MoviesViewModel: ViewModel() {
 
     fun addMovie(movie: Movie) {
         _movieList.add(movie)
+    }
+
+    fun filterMovie(movieId: String): Movie {
+        return _movieList.filter { it.id == movieId}[0]
     }
 
 }

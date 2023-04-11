@@ -1,5 +1,5 @@
 package com.example.movieappmad23.screens
-
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
@@ -15,18 +15,19 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.movieappmad23.R
 import com.example.movieappmad23.ViewModel.MoviesViewModel
 import com.example.movieappmad23.models.Genre
 import com.example.movieappmad23.models.ListItemSelectable
+import com.example.movieappmad23.models.Movie
 import com.example.movieappmad23.models.getMovies
 import com.example.movieappmad23.widgets.SimpleTopAppBar
 
 @Composable
 fun AddMovieScreen(navController: NavController, moviesViewModel: MoviesViewModel){
     val scaffoldState = rememberScaffoldState()
-    val movie = getMovies()
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -36,8 +37,8 @@ fun AddMovieScreen(navController: NavController, moviesViewModel: MoviesViewMode
             }
         },
     ) { padding ->
-        MainContent(Modifier.padding(padding),
-      //  onaddMovie = { movie -> moviesViewModel.addMovie(movie)})
+        MainContent(Modifier.padding(padding))
+        //onAddMovie = {movie: Movie -> moviesViewModel.addMovie(movie)})
     }
 }
 
@@ -195,7 +196,7 @@ fun MainContent(modifier: Modifier = Modifier) {
 
             Button(
                 enabled = isEnabledSaveButton,
-                onClick = { /*TODO add a new movie to the movie list*/ }) {
+                onClick = { /**/ }) {
                 Text(text = stringResource(R.string.add))
             }
         }
