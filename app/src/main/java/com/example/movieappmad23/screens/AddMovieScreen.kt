@@ -1,5 +1,4 @@
 package com.example.movieappmad23.screens
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
@@ -14,16 +13,14 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.movieappmad23.R
 import com.example.movieappmad23.ViewModel.MoviesViewModel
 import com.example.movieappmad23.models.Genre
 import com.example.movieappmad23.models.ListItemSelectable
 import com.example.movieappmad23.models.Movie
-import com.example.movieappmad23.models.getMovies
 import com.example.movieappmad23.widgets.SimpleTopAppBar
+import java.time.Instant
 
 @Composable
 fun AddMovieScreen(navController: NavController, moviesViewModel: MoviesViewModel){
@@ -37,14 +34,15 @@ fun AddMovieScreen(navController: NavController, moviesViewModel: MoviesViewMode
             }
         },
     ) { padding ->
-        MainContent(Modifier.padding(padding),
-        moviesViewModel = moviesViewModel)
+        MainContentAdd(Modifier.padding(padding),
+        moviesViewModel = moviesViewModel,
+        navController = navController)
     }
 }
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun MainContent(modifier: Modifier = Modifier, moviesViewModel: MoviesViewModel) {
+fun MainContentAdd(modifier: Modifier = Modifier, moviesViewModel: MoviesViewModel, navController: NavController) {
     Surface(
         modifier = modifier
             .fillMaxWidth()
@@ -115,7 +113,7 @@ fun MainContent(modifier: Modifier = Modifier, moviesViewModel: MoviesViewModel)
                 modifier = Modifier.fillMaxWidth(),
                 onValueChange = { year = it },
                 label = { Text(stringResource(R.string.enter_movie_year)) },
-                isError = false
+                isError = !moviesViewModel.isYearValid(year)
             )
 
             Text(
@@ -123,6 +121,9 @@ fun MainContent(modifier: Modifier = Modifier, moviesViewModel: MoviesViewModel)
                 text = stringResource(R.string.select_genres),
                 textAlign = TextAlign.Start,
                 style = MaterialTheme.typography.h6)
+            if (!moviesViewModel.isGenreSelectablesValid(genreItems)){
+                Text(text = "Please select at least one!")
+            }
 
             LazyHorizontalGrid(
                 modifier = Modifier.height(100.dp),
@@ -157,7 +158,7 @@ fun MainContent(modifier: Modifier = Modifier, moviesViewModel: MoviesViewModel)
                 modifier = Modifier.fillMaxWidth(),
                 onValueChange = { director = it },
                 label = { Text(stringResource(R.string.enter_director)) },
-                isError = false
+                isError = !moviesViewModel.isDirectorValid(director)
             )
 
             OutlinedTextField(
@@ -165,7 +166,7 @@ fun MainContent(modifier: Modifier = Modifier, moviesViewModel: MoviesViewModel)
                 modifier = Modifier.fillMaxWidth(),
                 onValueChange = { actors = it },
                 label = { Text(stringResource(R.string.enter_actors)) },
-                isError = false
+                isError = !moviesViewModel.isActorValid(actors)
             )
 
             OutlinedTextField(
@@ -176,7 +177,7 @@ fun MainContent(modifier: Modifier = Modifier, moviesViewModel: MoviesViewModel)
                     .height(120.dp),
                 onValueChange = { plot = it },
                 label = { Text(textAlign = TextAlign.Start, text = stringResource(R.string.enter_plot)) },
-                isError = false
+                isError = !moviesViewModel.isPlotValid(plot)
             )
 
             OutlinedTextField(
@@ -191,12 +192,33 @@ fun MainContent(modifier: Modifier = Modifier, moviesViewModel: MoviesViewModel)
                                 }
                 },
                 label = { Text(stringResource(R.string.enter_rating)) },
-                isError = false
+                isError = !moviesViewModel.isRatingValid(rating)
             )
+            isEnabledSaveButton = moviesViewModel.isTitleValid(title)
+                    && moviesViewModel.isYearValid(year)
+                    && moviesViewModel.isGenreSelectablesValid(genreItems)
+                    && moviesViewModel.isDirectorValid(director)
+                    && moviesViewModel.isActorValid(actors)
+                    && moviesViewModel.isPlotValid(plot)
+                    && moviesViewModel.isRatingValid(rating)
 
             Button(
                 enabled = isEnabledSaveButton,
-                onClick = { /**/ }) {
+                onClick = {
+                    val newMovie = Movie(id = Instant.now().toString(),
+                        title = title,
+                        year = year,
+                        genre = genreItems.map {Genre.valueOf(it.title)},
+                        director = director,
+                        actors = actors,
+                        plot = plot,
+                        images = listOf("https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/681px-Placeholder_view_vector.svg.png"),
+                        rating = rating.toFloat()
+                    )
+                    moviesViewModel.addMovie(newMovie)
+                    navController.popBackStack()
+
+                }) {
                 Text(text = stringResource(R.string.add))
             }
         }
