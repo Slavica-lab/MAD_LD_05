@@ -7,6 +7,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.movieappmad23.ViewModel.MoviesViewModel
 import com.example.movieappmad23.models.Movie
 import com.example.movieappmad23.models.getMovies
 import com.example.movieappmad23.widgets.HorizontalScrollableImageView
@@ -19,7 +20,8 @@ fun filterMovie(movieId: String): Movie {
 @Composable
 fun DetailScreen(
     navController: NavController,
-    movieId:String?){
+    movieId:String?,
+    moviesViewModel: MoviesViewModel){
 
     movieId?.let {
         val movie = filterMovie(movieId = movieId)

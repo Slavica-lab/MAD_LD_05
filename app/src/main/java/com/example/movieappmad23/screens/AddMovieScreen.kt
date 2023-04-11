@@ -14,14 +14,16 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.example.movieappmad23.R
+import com.example.movieappmad23.ViewModel.MoviesViewModel
 import com.example.movieappmad23.models.Genre
 import com.example.movieappmad23.models.ListItemSelectable
 import com.example.movieappmad23.widgets.SimpleTopAppBar
 
 @Composable
-fun AddMovieScreen(navController: NavController){
+fun AddMovieScreen(navController: NavController, moviesViewModel: MoviesViewModel){
     val scaffoldState = rememberScaffoldState()
 
     Scaffold(

@@ -1,27 +1,31 @@
 package com.example.movieappmad23.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.movieappmad23.ViewModel.MoviesViewModel
 import com.example.movieappmad23.screens.*
 
 @Composable
 fun Navigation() {
     val navController = rememberNavController()
+    val moviesViewModel: MoviesViewModel = viewModel()
     NavHost(navController = navController, startDestination = Screen.MainScreen.route) {
         composable(route = Screen.MainScreen.route){
-            HomeScreen(navController = navController)
+            HomeScreen(navController = navController, viewModel = moviesViewModel)
         }
 
         composable(Screen.FavoriteScreen.route) {
-            FavoriteScreen(navController = navController)
+            FavoriteScreen(navController = navController, viewModel = moviesViewModel)
         }
 
         composable(Screen.AddMovieScreen.route) {
-            AddMovieScreen(navController = navController)
+            AddMovieScreen(navController = navController, viewModel = moviesViewModel)
         }
 
         // build a route like: root/detail-screen/id=34
@@ -30,7 +34,7 @@ fun Navigation() {
             arguments = listOf(navArgument(name = DETAIL_ARGUMENT_KEY) {type = NavType.StringType})
         ) { backStackEntry ->    // backstack contains all information from navhost
             DetailScreen(navController = navController, backStackEntry.arguments?.getString(
-                DETAIL_ARGUMENT_KEY))   // get the argument from navhost that will be passed
+                DETAIL_ARGUMENT_KEY), viewModel = moviesViewModel)   // get the argument from navhost that will be passed
         }
     }
 }
