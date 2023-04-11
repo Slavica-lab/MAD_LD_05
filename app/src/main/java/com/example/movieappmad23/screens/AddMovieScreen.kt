@@ -37,14 +37,14 @@ fun AddMovieScreen(navController: NavController, moviesViewModel: MoviesViewMode
             }
         },
     ) { padding ->
-        MainContent(Modifier.padding(padding))
-        //onAddMovie = {movie: Movie -> moviesViewModel.addMovie(movie)})
+        MainContent(Modifier.padding(padding),
+        moviesViewModel = moviesViewModel)
     }
 }
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun MainContent(modifier: Modifier = Modifier) {
+fun MainContent(modifier: Modifier = Modifier, moviesViewModel: MoviesViewModel) {
     Surface(
         modifier = modifier
             .fillMaxWidth()
@@ -106,7 +106,7 @@ fun MainContent(modifier: Modifier = Modifier) {
                 modifier = Modifier.fillMaxWidth(),
                 onValueChange = { title = it },
                 label = { Text(text = stringResource(R.string.enter_movie_title)) },
-                isError = false
+                isError = !moviesViewModel.isTitleValid(title)
             )
 
             OutlinedTextField(

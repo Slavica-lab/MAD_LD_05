@@ -27,4 +27,8 @@ class MoviesViewModel: ViewModel() {
         return _movieList.filter { it.id == movieId}[0]
     }
 
+    fun isTitleValid(title: String): Boolean {
+        return title.isNotEmpty()
+    }
+
 }
