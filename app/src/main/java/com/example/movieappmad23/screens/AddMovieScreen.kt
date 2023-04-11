@@ -20,11 +20,13 @@ import com.example.movieappmad23.R
 import com.example.movieappmad23.ViewModel.MoviesViewModel
 import com.example.movieappmad23.models.Genre
 import com.example.movieappmad23.models.ListItemSelectable
+import com.example.movieappmad23.models.getMovies
 import com.example.movieappmad23.widgets.SimpleTopAppBar
 
 @Composable
 fun AddMovieScreen(navController: NavController, moviesViewModel: MoviesViewModel){
     val scaffoldState = rememberScaffoldState()
+    val movie = getMovies()
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -34,7 +36,8 @@ fun AddMovieScreen(navController: NavController, moviesViewModel: MoviesViewMode
             }
         },
     ) { padding ->
-        MainContent(Modifier.padding(padding))
+        MainContent(Modifier.padding(padding),
+      //  onaddMovie = { movie -> moviesViewModel.addMovie(movie)})
     }
 }
 
