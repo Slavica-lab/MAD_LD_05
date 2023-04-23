@@ -9,6 +9,9 @@ class MoviesViewModelFactory(private val repository: MovieRepository): ViewModel
         if(modelClass.isAssignableFrom(MoviesViewModel::class.java)){
             return MoviesViewModel(repository = repository) as T
         }
+        if(modelClass.isAssignableFrom(DetailScreenViewModel::class.java)){
+            return DetailScreenViewModel(repository = repository) as T
+        }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
 }

@@ -3,6 +3,8 @@ package com.example.movieappmad23.conversion
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.room.TypeConverter
+import com.example.movieappmad23.models.Genre
+import kotlin.streams.toList
 
 class Converters {
     @TypeConverter
@@ -35,5 +37,21 @@ class Converters {
             return null
         }
         return mutableStateOf(boolean)
+    }
+
+    @TypeConverter
+    fun toString(list: List<Genre>?): String? {
+        if (list == null) {
+            return null
+        }
+        return list.joinToString(separator = "||")
+    }
+
+    @TypeConverter
+    fun toListGenre(string: String?): List<Genre>? {
+        if (string == null) {
+            return null
+        }
+        return string.split("||").stream().map { Genre.valueOf(it) }.toList()
     }
 }

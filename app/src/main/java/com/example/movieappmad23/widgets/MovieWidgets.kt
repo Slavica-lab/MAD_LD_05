@@ -39,7 +39,7 @@ fun MovieRow(
     movie: Movie = getMovies()[0],
     modifier: Modifier = Modifier,
     onItemClick: (String) -> Unit = {},
-    moviesViewModel: MoviesViewModel
+    onFavoriteClick: (Movie) -> Unit
 ) {
     Card(modifier = modifier
         .clickable {
@@ -59,7 +59,7 @@ fun MovieRow(
                 if (!movie.images.isNullOrEmpty()) {
                     MovieImage(imageUrl = movie.images[0])
                 }
-                FavoriteIcon(movie, moviesViewModel)
+                FavoriteIcon(movie, onFavoriteClick)
             }
 
             MovieDetails(modifier = Modifier.padding(12.dp), movie = movie)
@@ -85,7 +85,7 @@ fun MovieImage(imageUrl: String) {
 }
 
 @Composable
-fun FavoriteIcon(movie: Movie, moviesViewModel: MoviesViewModel) {
+fun FavoriteIcon(movie: Movie, onFavoriteClick: (Movie) -> Unit) {
     Box(modifier = Modifier
         .fillMaxSize()
         .padding(10.dp),
@@ -93,7 +93,7 @@ fun FavoriteIcon(movie: Movie, moviesViewModel: MoviesViewModel) {
     ){
         Icon(
             modifier = Modifier
-                .clickable { moviesViewModel.toggleFavorite(movie)},
+                .clickable { onFavoriteClick(movie) },
             tint = MaterialTheme.colors.secondary,
             imageVector = if(movie.favorite.value) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
             contentDescription = "Add to favorites")

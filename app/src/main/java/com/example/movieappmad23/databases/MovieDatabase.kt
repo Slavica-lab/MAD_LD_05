@@ -9,7 +9,7 @@ import com.example.movieappmad23.conversion.Converters
 import com.example.movieappmad23.models.Movie
 import com.example.movieappmad23.models.MovieDao
 // :: equivalent zu typeof
-@Database(entities =  [Movie::class], version = 3)
+@Database(entities =  [Movie::class], version = 4)
 @TypeConverters(Converters::class)
 abstract class MovieDatabase : RoomDatabase(){
     abstract fun movieDao(): MovieDao

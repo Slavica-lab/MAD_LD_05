@@ -1,5 +1,6 @@
 package com.example.movieappmad23.ViewModel
 
+import androidx.compose.runtime.mutableStateListOf
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,33 +13,45 @@ class MoviesViewModel(repository: MovieRepository): ViewModel() {
     init {
         viewModelScope.launch {
             repository.getAllMovies().collect{
-                movies -> _movieList = movies.toMutableList()
+                movies ->
+                run {
+                    _movieList.clear()
+                    _movieList.addAll(movies)
+                }
             }
         }
     }
     private var _repository = repository
-    private var _movieList = mutableListOf<Movie>()
+    private var _movieList = mutableStateListOf<Movie>()
     val movieList: List<Movie>
         get()=_movieList
 
     //write methods
 
     fun getFavoriteMovies(): List<Movie>{
-        return _movieList.filter { it.favorite.value }
+        var result = mutableStateListOf<Movie>()
+        viewModelScope.launch {
+            _repository.getFavoriteMovies().collect{
+                    movies ->
+                run {
+                    result.clear()
+                    result.addAll(movies)
+                }
+            }
+        }
+        return result
     }
 
     fun removeMovie(movie: Movie) {
-        _movieList.remove(movie)
+        viewModelScope.launch {
+            _repository.deleteMovie(movie)
+        }
     }
 
     fun addMovie(movie: Movie) {
         viewModelScope.launch {
             _repository.addMovie(movie)
         }
-    }
-
-    fun filterMovie(movieId: String): Movie {
-        return _movieList.filter { it.id == movieId}[0]
     }
 
     fun isTitleValid(title: String): Boolean {

@@ -10,7 +10,6 @@ data class Movie(
     @PrimaryKey var id: String,
     var title: String,
     var year: String,
-    @Ignore
     var genre: List<Genre>,
     var director: String,
     var actors: String,
@@ -28,7 +27,7 @@ interface MovieDao{
     fun getAll(): Flow<List<Movie>>
 
     @Delete
-    fun delete(movie: Movie)
+    suspend fun delete(movie: Movie)
 
     @Insert
     suspend fun add(movie: Movie)
@@ -36,11 +35,11 @@ interface MovieDao{
     @Update
     suspend fun update(movie: Movie)
 
-    @Query("SELECT * FROM movie")
+    @Query("SELECT * FROM movie WHERE favorite = true")
     fun getFavorites(): Flow<List<Movie>>
 
-    @Query("SELECT * FROM movie")
-    fun get(): Flow<Movie?>
+    @Query("SELECT * FROM movie WHERE id = :id")
+    fun get(id: String): Flow<Movie?>
 
 }
 

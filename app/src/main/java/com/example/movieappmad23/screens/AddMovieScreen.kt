@@ -208,7 +208,7 @@ fun MainContentAdd(modifier: Modifier = Modifier, moviesViewModel: MoviesViewMod
                     val newMovie = Movie(id = Instant.now().toString(),
                         title = title,
                         year = year,
-                        genre = genreItems.map {Genre.valueOf(it.title)},
+                        genre = genreItems.filter { it.isSelected }.map {Genre.valueOf(it.title)}.toList(),
                         director = director,
                         actors = actors,
                         plot = plot,

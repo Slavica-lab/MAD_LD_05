@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.movieappmad23.ViewModel.DetailScreenViewModel
 import com.example.movieappmad23.ViewModel.MoviesViewModel
 import com.example.movieappmad23.models.Movie
 import com.example.movieappmad23.models.getMovies
@@ -20,11 +21,12 @@ import com.example.movieappmad23.widgets.SimpleTopAppBar
 fun DetailScreen(
     navController: NavController,
     movieId:String?,
-    moviesViewModel: MoviesViewModel){
+    moviesViewModel: DetailScreenViewModel){
 
     movieId?.let {
-        val movie = moviesViewModel.filterMovie(movieId = movieId)
+        moviesViewModel.filterMovie(movieId = movieId)
 
+        val movie = moviesViewModel.movie;
         // needed for show/hide snackbar
         val scaffoldState = rememberScaffoldState() // this contains the `SnackbarHostState`
 
@@ -41,7 +43,7 @@ fun DetailScreen(
 }
 
 @Composable
-fun MainContent(modifier: Modifier = Modifier, movie: Movie, moviesViewModel : MoviesViewModel) {
+fun MainContent(modifier: Modifier = Modifier, movie: Movie, moviesViewModel: DetailScreenViewModel) {
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -53,7 +55,10 @@ fun MainContent(modifier: Modifier = Modifier, movie: Movie, moviesViewModel : M
             verticalArrangement = Arrangement.Top
         ) {
 
-            MovieRow(movie = movie, moviesViewModel= moviesViewModel)
+            MovieRow(movie = movie,
+                onFavoriteClick = { movie ->
+                    moviesViewModel.toggleFavorite(movie)
+                })
 
             Spacer(modifier = Modifier.height(8.dp))
 
