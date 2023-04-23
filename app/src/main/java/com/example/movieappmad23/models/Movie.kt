@@ -2,19 +2,47 @@ package com.example.movieappmad23.models
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.room.*
+import kotlinx.coroutines.flow.Flow
 
+@Entity
 data class Movie(
-    val id: String,
-    val title: String,
-    val year: String,
-    val genre: List<Genre>,
-    val director: String,
-    val actors: String,
-    val plot: String,
-    val images: List<String>,
-    val rating: Float = 0f,
-    var isFavorite: MutableState<Boolean> = mutableStateOf(false)
-)
+    @PrimaryKey var id: String,
+    var title: String,
+    var year: String,
+    @Ignore
+    var genre: List<Genre>,
+    var director: String,
+    var actors: String,
+    var plot: String,
+    var images: List<String>,
+    var rating: Float = 0f,
+    var favorite: MutableState<Boolean> = mutableStateOf(false)
+){
+    constructor(): this("", "", "", listOf(), "", "", "", listOf())
+}
+
+@Dao
+interface MovieDao{
+    @Query("SELECT * FROM movie")
+    fun getAll(): Flow<List<Movie>>
+
+    @Delete
+    fun delete(movie: Movie)
+
+    @Insert
+    suspend fun add(movie: Movie)
+
+    @Update
+    suspend fun update(movie: Movie)
+
+    @Query("SELECT * FROM movie")
+    fun getFavorites(): Flow<List<Movie>>
+
+    @Query("SELECT * FROM movie")
+    fun get(): Flow<Movie?>
+
+}
 
 fun getMovies(): List<Movie> {
     return listOf(

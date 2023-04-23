@@ -2,19 +2,29 @@ package com.example.movieappmad23.ViewModel
 
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.movieappmad23.models.ListItemSelectable
 import com.example.movieappmad23.models.Movie
-import com.example.movieappmad23.models.getMovies
+import com.example.movieappmad23.repositories.MovieRepository
+import kotlinx.coroutines.launch
 
-class MoviesViewModel: ViewModel() {
-    private val _movieList = getMovies().toMutableList()
+class MoviesViewModel(repository: MovieRepository): ViewModel() {
+    init {
+        viewModelScope.launch {
+            repository.getAllMovies().collect{
+                movies -> _movieList = movies.toMutableList()
+            }
+        }
+    }
+    private var _repository = repository
+    private var _movieList = mutableListOf<Movie>()
     val movieList: List<Movie>
         get()=_movieList
 
     //write methods
 
     fun getFavoriteMovies(): List<Movie>{
-        return _movieList.filter { it.isFavorite.value }
+        return _movieList.filter { it.favorite.value }
     }
 
     fun removeMovie(movie: Movie) {
@@ -22,7 +32,9 @@ class MoviesViewModel: ViewModel() {
     }
 
     fun addMovie(movie: Movie) {
-        _movieList.add(movie)
+        viewModelScope.launch {
+            _repository.addMovie(movie)
+        }
     }
 
     fun filterMovie(movieId: String): Movie {
@@ -55,6 +67,13 @@ class MoviesViewModel: ViewModel() {
 
     fun isRatingValid(rating: String): Boolean {
         return rating.toFloatOrNull() != null
+    }
+
+    fun toggleFavorite(movie: Movie){
+        movie.favorite.value = !movie.favorite.value
+        viewModelScope.launch {
+            _repository.updateMovie(movie)
+        }
     }
 
 

@@ -6,8 +6,13 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.movieappmad23.ViewModel.MoviesViewModel
+import com.example.movieappmad23.ViewModel.MoviesViewModelFactory
+import com.example.movieappmad23.databases.MovieDatabase
 import com.example.movieappmad23.navigation.Navigation
+import com.example.movieappmad23.repositories.MovieRepository
 import com.example.movieappmad23.ui.theme.MovieAppMAD23Theme
 
 class MainActivity : ComponentActivity() {
@@ -20,8 +25,6 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-        val moviesViewModel: MoviesViewModel by viewModels()
-        moviesViewModel.movieList
     }
 
     override fun onStart() {

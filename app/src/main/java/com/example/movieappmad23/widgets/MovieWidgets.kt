@@ -27,6 +27,8 @@ import coil.compose.AsyncImage
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import com.example.movieappmad23.R
+import com.example.movieappmad23.ViewModel.MoviesViewModel
+import com.example.movieappmad23.ViewModel.MoviesViewModelFactory
 import com.example.movieappmad23.models.Movie
 import com.example.movieappmad23.models.getMovies
 import com.example.movieappmad23.ui.theme.Shapes
@@ -36,7 +38,8 @@ import com.example.movieappmad23.ui.theme.Shapes
 fun MovieRow(
     movie: Movie = getMovies()[0],
     modifier: Modifier = Modifier,
-    onItemClick: (String) -> Unit = {}
+    onItemClick: (String) -> Unit = {},
+    moviesViewModel: MoviesViewModel
 ) {
     Card(modifier = modifier
         .clickable {
@@ -53,8 +56,10 @@ fun MovieRow(
                 .fillMaxWidth(),
                 contentAlignment = Alignment.Center
             ) {
-                MovieImage(imageUrl = movie.images[0])
-                FavoriteIcon(movie)
+                if (!movie.images.isNullOrEmpty()) {
+                    MovieImage(imageUrl = movie.images[0])
+                }
+                FavoriteIcon(movie, moviesViewModel)
             }
 
             MovieDetails(modifier = Modifier.padding(12.dp), movie = movie)
@@ -80,7 +85,7 @@ fun MovieImage(imageUrl: String) {
 }
 
 @Composable
-fun FavoriteIcon(movie: Movie) {
+fun FavoriteIcon(movie: Movie, moviesViewModel: MoviesViewModel) {
     Box(modifier = Modifier
         .fillMaxSize()
         .padding(10.dp),
@@ -88,9 +93,9 @@ fun FavoriteIcon(movie: Movie) {
     ){
         Icon(
             modifier = Modifier
-                .clickable { movie.isFavorite.value = !movie.isFavorite.value},
+                .clickable { moviesViewModel.toggleFavorite(movie)},
             tint = MaterialTheme.colors.secondary,
-            imageVector = if(movie.isFavorite.value) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+            imageVector = if(movie.favorite.value) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
             contentDescription = "Add to favorites")
     }
 }

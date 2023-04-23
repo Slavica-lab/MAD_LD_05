@@ -60,7 +60,8 @@ fun MainContent(
     MovieList(
         modifier = modifier,
         navController = navController,
-        movies = movies
+        movies = movies,
+        moviesViewModel = moviesViewModel
     )
 }
 
@@ -68,7 +69,8 @@ fun MainContent(
 fun MovieList(
     modifier: Modifier = Modifier,
     navController: NavController,
-    movies: List<Movie> = getMovies()
+    movies: List<Movie> = getMovies(),
+    moviesViewModel: MoviesViewModel
 ) {
     LazyColumn (
         modifier = modifier,
@@ -80,7 +82,7 @@ fun MovieList(
                 movie = movie,
                 onItemClick = { movieId ->
                     navController.navigate(Screen.DetailScreen.withId(movieId))
-                }
+                }, moviesViewModel= moviesViewModel
             )
         }
     }

@@ -1,6 +1,7 @@
 package com.example.movieappmad23.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
@@ -9,12 +10,18 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.movieappmad23.ViewModel.MoviesViewModel
+import com.example.movieappmad23.ViewModel.MoviesViewModelFactory
+import com.example.movieappmad23.databases.MovieDatabase
+import com.example.movieappmad23.repositories.MovieRepository
 import com.example.movieappmad23.screens.*
 
 @Composable
 fun Navigation() {
     val navController = rememberNavController()
-    val moviesViewModel: MoviesViewModel = viewModel()
+    val db = MovieDatabase.getDatabase(LocalContext.current)
+    val repository = MovieRepository(movieDao = db.movieDao())
+    val factory = MoviesViewModelFactory(repository = repository)
+    val moviesViewModel: MoviesViewModel = viewModel(factory = factory)
     NavHost(navController = navController, startDestination = Screen.MainScreen.route) {
         composable(route = Screen.MainScreen.route){
             HomeScreen(navController = navController, moviesViewModel = moviesViewModel)

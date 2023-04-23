@@ -53,7 +53,7 @@ fun MainContent(modifier: Modifier = Modifier, movie: Movie, moviesViewModel : M
             verticalArrangement = Arrangement.Top
         ) {
 
-            MovieRow(movie = movie)
+            MovieRow(movie = movie, moviesViewModel= moviesViewModel)
 
             Spacer(modifier = Modifier.height(8.dp))
 
